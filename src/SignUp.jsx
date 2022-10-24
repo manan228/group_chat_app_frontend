@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useRef, useState } from "react";
 
 function SignUp() {
+  console.log(`inside signup`)
   const [error, setError] = useState(false);
 
   const nameInputRef = useRef();
@@ -34,12 +35,13 @@ function SignUp() {
 
       console.log(response.data);
 
-      alert("successfully signed up")
+      alert("successfully signed up");
     } catch (err) {
       console.log(err.response.data);
       setError("user already exist, please Login in");
     }
   };
+
   return (
     <>
       <form onSubmit={onSignUpFormHandler}>
