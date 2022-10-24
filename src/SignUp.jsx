@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useRef, useState } from "react";
 
-function SignUp() {
-  console.log(`inside signup`)
+const SignUp = () => {
+  console.log(`inside signup`);
   const [error, setError] = useState(false);
 
   const nameInputRef = useRef();
@@ -66,6 +66,6 @@ function SignUp() {
       {error && <div>{error}</div>}
     </>
   );
-}
+};
 
 export default SignUp;

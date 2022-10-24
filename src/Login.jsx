@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useRef } from "react";
-import { Navigate, redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function Login() {
+const Login = () => {
   const navigate = useNavigate();
+
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
@@ -20,7 +21,7 @@ function Login() {
       password,
     };
 
-    console.log(loginObj)
+    console.log(loginObj);
 
     try {
       const response = await axios.post(
@@ -29,6 +30,8 @@ function Login() {
       );
 
       console.log(response);
+
+      navigate('/group-chat-app')
     } catch (err) {
       console.log(err.response.data);
     }
@@ -50,11 +53,9 @@ function Login() {
       {/* <button onClick={() => <Navigate to="/signup" replace={true} />}>
         SignUp
       </button> */}
-      <button onClick={() => navigate('/signup')}>
-        SignUp
-      </button>
+      <button onClick={() => navigate("/signup")}>SignUp</button>
     </>
   );
-}
+};
 
 export default Login;
