@@ -31,7 +31,11 @@ const Login = () => {
 
       console.log(response);
 
-      navigate('/group-chat-app')
+      const token = response.data.token;
+
+      localStorage.setItem("token", token);
+
+      navigate("/group-chat-app");
     } catch (err) {
       console.log(err.response.data);
     }

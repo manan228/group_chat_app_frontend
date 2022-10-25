@@ -8,6 +8,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
+        <Route index element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/group-chat-app" element={<GroupChatApp />} />
