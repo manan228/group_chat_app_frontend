@@ -1,11 +1,24 @@
 import axios from "axios";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 const GroupChatApp = () => {
   const messageInputRef = useRef();
 
   const token = localStorage.getItem("token");
-  console.log(token);
+
+  useEffect(() => {
+    const getAllMessages = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/all-messages");
+
+        console.log(response.data.response)
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getAllMessages();
+  }, []);
 
   const onSendClickHandler = async () => {
     const message = messageInputRef.current.value;
