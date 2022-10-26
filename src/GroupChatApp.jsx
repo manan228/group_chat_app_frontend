@@ -7,14 +7,10 @@ const GroupChatApp = () => {
 
   const messageInputRef = useRef();
 
-  const token = localStorage.getItem("token");
-
   useEffect(() => {
     const onLineUsers = async () => {
       try {
         const response = await axios.get("http://localhost:3000/online-users");
-
-        console.log(response.data);
 
         setOnline(response.data);
       } catch (err) {
@@ -31,11 +27,40 @@ const GroupChatApp = () => {
 
   useEffect(() => {
     const getAllMessages = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/all-messages");
+      let lastMessageId;
+      const messagesFromLS = JSON.parse(localStorage.getItem("messages"));
 
-        console.log(response.data);
-        setMessages(response.data.response);
+      if (messagesFromLS === null) {
+        lastMessageId = 0;
+      } else if (messagesFromLS.length === 0) {
+        lastMessageId = 0;
+      } else {
+        lastMessageId = messagesFromLS[messagesFromLS.length - 1].id;
+      }
+
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/all-messages?lastMessageId=${lastMessageId}`
+        );
+
+        const messagesFromDB = response.data.response;
+
+        let finalMessagesToStore;
+
+        if (messagesFromLS === null) {
+          localStorage.setItem("messages", JSON.stringify([]));
+
+          finalMessagesToStore = JSON.stringify([...messagesFromDB]);
+        } else {
+          finalMessagesToStore = JSON.stringify([
+            ...messagesFromLS,
+            ...messagesFromDB,
+          ]);
+        }
+
+        localStorage.setItem("messages", finalMessagesToStore);
+
+        setMessages(JSON.parse(finalMessagesToStore));
       } catch (err) {
         console.log(err);
       }
@@ -49,6 +74,8 @@ const GroupChatApp = () => {
   }, []);
 
   const onSendClickHandler = async () => {
+    const token = localStorage.getItem("token");
+
     const message = messageInputRef.current.value;
 
     try {
@@ -70,11 +97,11 @@ const GroupChatApp = () => {
     <>
       <div>GroupChatApp</div>
       {online.map(({ username }) => {
-        return <div>{username} Joined!!</div>;
+        return <div key={username}>{username} Joined!!</div>;
       })}
       {messages.map((message) => {
         return (
-          <div>
+          <div key={message.id}>
             {message.userEmail}: {message.message}
           </div>
         );
