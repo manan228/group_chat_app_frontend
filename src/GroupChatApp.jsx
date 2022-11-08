@@ -5,7 +5,6 @@ import { useCallback } from "react";
 import "reactjs-popup/dist/index.css";
 
 const GroupChatApp = () => {
-  console.log(`group chat app 1st line`);
   const [messages, setMessages] = useState([]);
   const [online, setOnline] = useState([]);
   const [createGroup, setCreateGroup] = useState(false);
@@ -13,7 +12,8 @@ const GroupChatApp = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState("");
-  console.log(`initially`, selectedGroup);
+  const [groupUsers, setGroupUsers] = useState([]);
+  const [toShowGroupUsers, setToShowGroupUsers] = useState(false);
 
   const messageInputRef = useRef();
   const groupNameRef = useRef();
@@ -21,17 +21,13 @@ const GroupChatApp = () => {
   const token = localStorage.getItem("token");
 
   const getGroups = useCallback(async () => {
-    console.log(`inside getgroup`, selectedGroup);
     try {
       const response = await axios.get("http://localhost:3000/get-groups", {
         headers: { Authorization: token },
       });
 
-      console.log(response.data);
-
       if (response.data.length > 0) {
         setGroups(response.data);
-        setSelectedGroup(response.data[0]);
       }
     } catch (err) {
       console.log(err);
@@ -39,12 +35,16 @@ const GroupChatApp = () => {
   }, [token]);
 
   useEffect(() => {
-    console.log(`inside get group useEffect`, selectedGroup);
-    getGroups();
+    // getGroups();
+
+    const id = setInterval(() => {
+      getGroups();
+    }, 1000);
+
+    return () => clearInterval(id);
   }, [token, getGroups]);
 
   useEffect(() => {
-    console.log(`inside online users useEffect`, selectedGroup);
     const onLineUsers = async () => {
       try {
         const response = await axios.get("http://localhost:3000/online-users");
@@ -55,17 +55,17 @@ const GroupChatApp = () => {
       }
     };
 
-    // setInterval(() => {
-    //   onLineUsers();
-    // }, 1000);
+    const id = setInterval(() => {
+      onLineUsers();
+    }, 1000);
 
-    onLineUsers();
+    return () => clearInterval(id);
+
+    // onLineUsers();
   }, []);
 
   useEffect(() => {
-    console.log(`inside get all message useEffect`, selectedGroup);
     const getAllMessages = async () => {
-      console.log(`inside get all messages`, selectedGroup);
       let lastMessageId;
       const messagesFromLS = JSON.parse(localStorage.getItem("messages"));
 
@@ -78,7 +78,6 @@ const GroupChatApp = () => {
       }
 
       if (selectedGroup !== "") {
-        console.log(`inside if`);
         try {
           const response = await axios.get(
             `http://localhost:3000/all-messages?lastMessageId=${lastMessageId}&selectedGroup=${selectedGroup}`
@@ -108,11 +107,13 @@ const GroupChatApp = () => {
       }
     };
 
-    // setInterval(() => {
-    //   getAllMessages();
-    // }, 1000);
+    const id = setInterval(() => {
+      getAllMessages();
+    }, 1000);
 
-    getAllMessages();
+    return () => clearInterval(id);
+
+    // getAllMessages();
   }, [selectedGroup]);
 
   const onSendClickHandler = async () => {
@@ -124,8 +125,6 @@ const GroupChatApp = () => {
     };
 
     try {
-      console.log("inside sendClickHandler", sendMessageObj);
-
       const response = await axios.post(
         "http://localhost:3000/send-message",
         sendMessageObj,
@@ -139,11 +138,8 @@ const GroupChatApp = () => {
   };
 
   const onCreateGroupClickHandler = async () => {
-    console.log(`on create new group clicked`);
     try {
       const response = await axios.get("http://localhost:3000/get-all-users");
-
-      console.log(response.data);
 
       setUsers(response.data);
       setFilteredUsers(response.data);
@@ -154,12 +150,10 @@ const GroupChatApp = () => {
   };
 
   const onSearchActive = (e) => {
-    console.log(e.target.value);
     const searchInput = e.target.value;
 
     if (searchInput.length > 0) {
       const filteredUsers = users.filter((user) => {
-        console.log(user.username.match(searchInput));
         return user.username.match(searchInput);
       });
 
@@ -170,12 +164,6 @@ const GroupChatApp = () => {
   };
 
   const onInviteClickHandler = async (userEmail) => {
-    console.log(
-      `onInviteClickHandler called`,
-      userEmail,
-      groupNameRef.current.value
-    );
-
     const createGroupObj = {
       grpName: groupNameRef.current.value,
       userEmail,
@@ -189,6 +177,7 @@ const GroupChatApp = () => {
           headers: { Authorization: token },
         }
       );
+
       console.log(response);
 
       getGroups();
@@ -198,16 +187,75 @@ const GroupChatApp = () => {
   };
 
   const onChangeGroupClickHandler = (group) => {
-    console.log(group);
-    console.log(`onChangeGroupClickHandler clicked`, group);
-
     localStorage.removeItem("messages");
     setSelectedGroup(group);
   };
 
+  const onShowUsersClickHandler = async (group) => {
+    try {
+      if (toShowGroupUsers === false) {
+        const response = await axios.get(
+          `http://localhost:3000/get-users/${group}`
+        );
+
+        setGroupUsers(response.data);
+      }
+      setToShowGroupUsers((prevState) => !prevState);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onMakeAdminClickHandler = async (user) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/make-admin",
+        user,
+        {
+          headers: { Authorization: token },
+        }
+      );
+
+      const index = groupUsers.findIndex(
+        (user) => user.id === response.data.id
+      );
+
+      groupUsers[index] = response.data;
+
+      setGroupUsers([...groupUsers]);
+    } catch (err) {
+      console.log(err);
+      alert("You are unauthorized");
+    }
+  };
+
+  const onRemoveUserClickHandler = async (user) => {
+    const { id } = user;
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/delete-group-user/${id}`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+
+      console.log(response);
+
+      if (response.data === 1) {
+        const updatedGrpUser = groupUsers.filter(
+          (grpUser) => grpUser.id !== user.id
+        );
+
+        setGroupUsers(updatedGrpUser);
+      }
+    } catch (err) {
+      console.log(err);
+      alert("You are unauthorized");
+    }
+  };
+
   return (
     <>
-      {console.log(`inside return`)}
       <div>GroupChatApp</div>
       {online.map(({ username }) => {
         return <div key={username}>{username} Joined!!</div>;
@@ -223,6 +271,7 @@ const GroupChatApp = () => {
       <button onClick={onSendClickHandler}>Send</button>
       <div>
         <button onClick={onCreateGroupClickHandler}>Create New Group</button>
+        <button onClick={() => setCreateGroup(false)}>X</button>
       </div>
       {createGroup && (
         <div>
@@ -236,7 +285,7 @@ const GroupChatApp = () => {
           </div>
           {filteredUsers.map((user) => {
             return (
-              <ul>
+              <ul key={user.username}>
                 <li>{user.username}</li>
                 <button
                   style={{ display: "inline-block" }}
@@ -253,17 +302,38 @@ const GroupChatApp = () => {
         List of Groups
         {groups.map((group) => {
           const id = group === selectedGroup ? "red" : null;
-
           return (
-            <div
-              onClick={() => onChangeGroupClickHandler(group)}
-              key={group}
-              style={{ color: id }}
-            >
-              {group}
+            <div key={group}>
+              <span
+                onClick={() => onChangeGroupClickHandler(group)}
+                key={group}
+                style={{ color: id }}
+              >
+                {group}
+              </span>
+              <button onClick={() => onShowUsersClickHandler(group)}>
+                Show Users
+              </button>
             </div>
           );
         })}
+        {toShowGroupUsers &&
+          groupUsers.map((user) => {
+            return (
+              <React.Fragment key={user.userEmail}>
+                <div>
+                  <span>{user.userEmail}</span>
+                  <button onClick={() => onMakeAdminClickHandler(user)}>
+                    Make Admin
+                  </button>
+                  <button onClick={() => onRemoveUserClickHandler(user)}>
+                    Remove User
+                  </button>
+                  {user.admin ? "admin" : ""}
+                </div>
+              </React.Fragment>
+            );
+          })}
       </div>
     </>
   );
