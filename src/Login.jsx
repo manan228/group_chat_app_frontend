@@ -11,8 +11,6 @@ const Login = () => {
   const onLoginFormHandler = async (e) => {
     e.preventDefault();
 
-    console.log(`on Login form handler clicked`);
-
     const email = emailInputRef.current.value;
     const password = passwordInputRef.current.value;
 
@@ -21,15 +19,11 @@ const Login = () => {
       password,
     };
 
-    console.log(loginObj);
-
     try {
       const response = await axios.post(
         "http://localhost:3000/login",
         loginObj
       );
-
-      console.log(response);
 
       const token = response.data.token;
 

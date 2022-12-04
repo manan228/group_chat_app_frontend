@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useRef, useState } from "react";
 
 const SignUp = () => {
-  console.log(`inside signup`);
   const [error, setError] = useState(false);
 
   const nameInputRef = useRef();
@@ -12,8 +11,6 @@ const SignUp = () => {
 
   const onSignUpFormHandler = async (e) => {
     e.preventDefault();
-
-    console.log(`on singup form handler clicked`);
 
     const name = nameInputRef.current.value;
     const email = emailInputRef.current.value;
@@ -33,11 +30,8 @@ const SignUp = () => {
         signUpObj
       );
 
-      console.log(response.data);
-
       alert("successfully signed up");
     } catch (err) {
-      console.log(err.response.data);
       setError("user already exist, please Login in");
     }
   };

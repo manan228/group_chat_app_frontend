@@ -130,8 +130,6 @@ const GroupChatApp = () => {
         sendMessageObj,
         { headers: { Authorization: token } }
       );
-
-      console.log(response);
     } catch (err) {
       console.log(err);
     }
@@ -177,8 +175,6 @@ const GroupChatApp = () => {
           headers: { Authorization: token },
         }
       );
-
-      console.log(response);
 
       getGroups();
     } catch (err) {
@@ -238,8 +234,6 @@ const GroupChatApp = () => {
           headers: { Authorization: token },
         }
       );
-
-      console.log(response);
 
       if (response.data === 1) {
         const updatedGrpUser = groupUsers.filter(
