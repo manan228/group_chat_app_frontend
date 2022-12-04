@@ -59,3 +59,190 @@ h1 {
 ul li {
   font-size: 20px;
 }
+
+/* ----------------------------------------------------------- */
+
+.loginFrame {
+  /* Frame 3 */
+
+  position: absolute;
+  width: 518px;
+  height: 726px;
+  left: 778px;
+  top: 98px;
+
+  background: url("https://s3-alpha-sig.figma.com/img/051a/d9ae/52e46ed6e503ba34c2ff3e3a2f5bfedf?Expires=1670803200&Signature=ahxfe~Bgbk~O-JyTDsvFjxC6TDikRSgePLwK77Dkue8uPQZuLpda~dQLD-Ga0RDmbUSC3LUjuzbIzr8BbbND7Whis0-h7iqoHDTWzr5jQm~sqoI5KtdJUpXFvduE65BZnArux3sYTze0jr0uGZbcqoH7fXxZyxVNzPw5NUoPmzDu2vQf4tpqDwm4QFB6xbR~2yUBnXADeqW5kJ-UtW~mU8eAwweMB7snTt9NaoFjhwbfThJJuJGLYBdafIT71hhqJloc5fLa85Jx6cRInYXUCO22UWPo9mSsleLhPz8HrPMSpXjlwQKCldbqzJK0VVSkJe9i4BhxrWh4SPUp1wvPHg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"),
+    #0f0f0f;
+
+  opacity: 70%;
+  box-shadow: 0px 319px 128px rgba(0, 0, 0, 0.01),
+    0px 180px 108px rgba(0, 0, 0, 0.05), 0px 80px 80px rgba(0, 0, 0, 0.09),
+    0px 20px 44px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.loginText {
+  /* LOG IN */
+
+  position: absolute;
+  width: 143px;
+  height: 60px;
+  left: 190px;
+  top: 60px;
+
+  font-family: "Reem Kufi";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 60px;
+  /* identical to box height */
+
+  color: #000000;
+}
+
+.emailBox {
+  /* Rectangle 1 */
+
+  position: absolute;
+  width: 360px;
+  height: 61px;
+  left: 79px;
+  top: 180px;
+
+  background: rgba(245, 245, 245, 0.8);
+  border-radius: 10px;
+}
+
+input::placeholder {
+  /* Email */
+
+  position: absolute;
+  width: 52px;
+  height: 30px;
+  left: 98px;
+  top: 195px;
+
+  font-family: "Reem Kufi";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+  /* identical to box height */
+
+  color: #000000;
+
+  opacity: 1;
+}
+
+.passwordBox {
+  /* Rectangle 2 */
+
+  position: absolute;
+  width: 360px;
+  height: 61px;
+  left: 79px;
+  top: 275px;
+
+  background: rgba(245, 245, 245, 0.8);
+  border-radius: 10px;
+}
+
+.planeText {
+  /* Remember me */
+
+  position: absolute;
+  width: 128px;
+  height: 30px;
+  left: 112px;
+  top: 347px;
+
+  font-family: "Reem Kufi";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+  /* identical to box height */
+
+  color: #000000;
+
+  opacity: 0.5;
+}
+
+.forgotPassword {
+  /* Forgot password? */
+
+  position: absolute;
+  width: 155px;
+  height: 30px;
+  left: 184px;
+  top: 452px;
+
+  font-family: "Reem Kufi";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+  /* identical to box height */
+
+  color: #000000;
+
+  opacity: 0.5;
+}
+
+.orBox {
+  /* Rectangle 5 */
+
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 56px;
+  height: 50px;
+  left: 231px;
+  top: 490px;
+
+  border: 3px solid rgba(220, 217, 217, 0.5);
+  border-radius: 10px;
+}
+
+.orText {
+  /* OR */
+
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  left: 247px;
+  top: 503px;
+
+  font-family: "Reem Kufi";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 22px;
+  /* identical to box height */
+
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.rightLine {
+  /* Line 2 */
+
+  position: absolute;
+  width: 143px;
+  height: 0px;
+  left: 287px;
+  top: 514px;
+
+  border: 3px solid rgba(220, 217, 217, 0.5);
+}
+
+.leftLine {
+  /* Line 1 */
+
+  position: absolute;
+  width: 143px;
+  height: 0px;
+  left: 88px;
+  top: 515px;
+
+  border: 3px solid rgba(219, 214, 214, 0.5);
+}

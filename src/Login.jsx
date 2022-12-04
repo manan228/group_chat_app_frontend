@@ -54,9 +54,6 @@ const Login = () => {
         </div>
         <button>Login</button>
       </form>
-      {/* <button onClick={() => <Navigate to="/signup" replace={true} />}>
-        SignUp
-      </button> */}
       <button onClick={() => navigate("/signup")}>SignUp</button>
     </>
   );

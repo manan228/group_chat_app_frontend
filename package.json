@@ -2,6 +2,7 @@
   "name": "group_chat_app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://manan228.github.io/group_chat_app_frontend",
   "dependencies": {
     "@mui/material": "^5.10.11",
     "@testing-library/jest-dom": "^5.16.5",
@@ -17,6 +18,8 @@
   },
   "scripts": {
     "start": "set PORT=3001 && react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -38,5 +41,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
   }
 }
